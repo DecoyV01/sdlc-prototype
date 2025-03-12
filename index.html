@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI-Driven SDLC</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>AI-Driven SDLC</h1>
+    <textarea v-model="input" placeholder="Enter requirements (e.g., Build a login page)"></textarea>
+    <button @click="submit">Generate</button>
+    <h3>BRS:</h3><pre>{{ brs }}</pre>
+    <h3>Functional Doc:</h3><pre>{{ functional }}</pre>
+    <h3>Code:</h3><pre>{{ code }}</pre>
+  </div>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        input: '',
+        brs: '',
+        functional: '',
+        code: ''
+      },
+      created() {
+        const urlParams = new URLSearchParams(window.location.search);
+        this.brs = decodeURIComponent(urlParams.get('brs') || '');
+        this.functional = decodeURIComponent(urlParams.get('functional') || '');
+        this.code = decodeURIComponent(urlParams.get('code') || '');
+        if (urlParams.toString()) {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      },
+      methods: {
+        submit() {
+          const scriptUrl = 'https://script.google.com/macros/s/AKfycbymCIhnLVXMDGY4W11-0MIejUv4RPuMs0xhpETZmcwVrLLFMZxyiJ-fFz_ioCETD95p2Q/exec'; // Replace with deployed URL
+          const redirectUrl = `${scriptUrl}?input=${encodeURIComponent(this.input)}`;
+          window.location.href = redirectUrl;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
