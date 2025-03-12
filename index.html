@@ -9,6 +9,7 @@
     <h1>AI-Driven SDLC</h1>
     <textarea v-model="input" placeholder="Enter requirements (e.g., Build a login page)"></textarea>
     <button @click="submit">Generate</button>
+    <h3 v-if="error">Error:</h3><pre v-if="error">{{ error }}</pre>
     <h3>BRS:</h3><pre>{{ brs }}</pre>
     <h3>Functional Doc:</h3><pre>{{ functional }}</pre>
     <h3>Code:</h3><pre>{{ code }}</pre>
@@ -20,22 +21,33 @@
         input: '',
         brs: '',
         functional: '',
-        code: ''
-      },
-      created() {
-        const urlParams = new URLSearchParams(window.location.search);
-        this.brs = decodeURIComponent(urlParams.get('brs') || '');
-        this.functional = decodeURIComponent(urlParams.get('functional') || '');
-        this.code = decodeURIComponent(urlParams.get('code') || '');
-        if (urlParams.toString()) {
-          window.history.replaceState({}, document.title, window.location.pathname);
-        }
+        code: '',
+        error: ''
       },
       methods: {
-        submit() {
-          const scriptUrl = 'https://script.google.com/macros/s/AKfycbymCIhnLVXMDGY4W11-0MIejUv4RPuMs0xhpETZmcwVrLLFMZxyiJ-fFz_ioCETD95p2Q/exec'; // Replace with deployed URL
-          const redirectUrl = `${scriptUrl}?input=${encodeURIComponent(this.input)}`;
-          window.location.href = redirectUrl;
+        async submit() {
+          try {
+            console.log('Submitting...');
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbyajlkPGuvSY3Mn8Z1pmkQtrYj_5vjEVgWYtBI0laAMruCHL8U58F6Cry0icJ8-gA/exec';
+            console.log('Fetching:', `${scriptUrl}?input=${encodeURIComponent(this.input)}`);
+            const response = await fetch(`${scriptUrl}?input=${encodeURIComponent(this.input)}`);
+            console.log('Response status:', response.status);
+            const data = await response.json();
+            console.log('Data:', data);
+            if (data.error) {
+              this.error = data.error;
+              this.brs = this.functional = this.code = '';
+            } else {
+              this.error = '';
+              this.brs = data.brs;
+              this.functional = data.functional;
+              this.code = data.code;
+            }
+          } catch (err) {
+            console.log('Fetch error:', err);
+            this.error = 'Fetch error: ' + err.message;
+            this.brs = this.functional = this.code = '';
+          }
         }
       }
     });
