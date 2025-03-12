@@ -33,7 +33,7 @@
       },
       methods: {
         submit() {
-          const scriptUrl = 'https://script.google.com/macros/s/AKfycbymCIhnLVXMDGY4W11-0MIejUv4RPuMs0xhpETZmcwVrLLFMZxyiJ-fFz_ioCETD95p2Q/exec'; // Replace with deployed URL
+          const scriptUrl = 'https://script.google.com/macros/s/AKfycbwg28xCpk1eXBh9HRBxBHMKfCVfnYsJ-jBwUpw8EL5fOEs3LUYnJ4QQKyIOUvqPutPYCA/exec'; // Replace with deployed URL
           const redirectUrl = `${scriptUrl}?input=${encodeURIComponent(this.input)}`;
           window.location.href = redirectUrl;
         }
