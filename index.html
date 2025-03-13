@@ -50,13 +50,13 @@
       methods: {
         submit() {
           this.loading = true;
-          const scriptUrl = 'https://script.google.com/a/macros/decoyenterprises.com/s/AKfycbzW49caMxE2kU4gbyUX5ekTD9goJXFMrr9KQuDqP9GXVsMGLb6FzuCnkLikihshzNdp/exec';
+          const scriptUrl = 'https://script.google.com/a/macros/decoyenterprises.com/s/AKfycbxydei9HPFMNY0iJY1tMA63L-Lz0qr0TfQHgWl-1UxRaKjuwFiqN34uZL2Zj73Bqetw/exec';
           console.log('Redirecting to:', `${scriptUrl}?input=${encodeURIComponent(this.input)}`);
           window.location.href = `${scriptUrl}?input=${encodeURIComponent(this.input)}`;
         },
         fetchFull(type) {
           this.loading = true;
-          const scriptUrl = 'https://script.google.com/a/macros/decoyenterprises.com/s/AKfycbzW49caMxE2kU4gbyUX5ekTD9goJXFMrr9KQuDqP9GXVsMGLb6FzuCnkLikihshzNdp/exec';
+          const scriptUrl = 'https://script.google.com/a/macros/decoyenterprises.com/s/AKfycbxydei9HPFMNY0iJY1tMA63L-Lz0qr0TfQHgWl-1UxRaKjuwFiqN34uZL2Zj73Bqetw/exec';
           console.log('Redirecting to:', `${scriptUrl}?id=${this.id}`);
           window.location.href = `${scriptUrl}?id=${this.id}`;
         }
