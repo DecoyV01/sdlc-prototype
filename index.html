@@ -3,15 +3,27 @@
 <head>
   <title>AI-Driven SDLC</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    textarea { width: 400px; height: 100px; margin-bottom: 10px; }
+    button { padding: 8px 16px; background: #4CAF50; color: white; border: none; cursor: pointer; }
+    button:hover { background: #45a049; }
+    pre { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+    h3 { margin-top: 20px; }
+  </style>
 </head>
 <body>
   <div id="app">
     <h1>AI-Driven SDLC</h1>
     <textarea v-model="input" placeholder="Enter requirements (e.g., Build a login page)"></textarea>
-    <button @click="submit">Generate</button>
+    <button @click="submit" :disabled="loading">{{ loading ? 'Generating...' : 'Generate' }}</button>
+    <h3 v-if="error">Error:</h3><pre v-if="error">{{ error }}</pre>
     <h3>BRS:</h3><pre>{{ brs }}</pre>
+    <button v-if="id && brs.endsWith('...')" @click="fetchFull('brs')" :disabled="loading">Show Full BRS</button>
     <h3>Functional Doc:</h3><pre>{{ functional }}</pre>
+    <button v-if="id && functional.endsWith('...')" @click="fetchFull('functional')" :disabled="loading">Show Full Functional</button>
     <h3>Code:</h3><pre>{{ code }}</pre>
+    <button v-if="id && code.endsWith('...')" @click="fetchFull('code')" :disabled="loading">Show Full Code</button>
   </div>
   <script>
     new Vue({
@@ -20,22 +32,33 @@
         input: '',
         brs: '',
         functional: '',
-        code: ''
+        code: '',
+        error: '',
+        id: null,
+        loading: false
       },
       created() {
         const urlParams = new URLSearchParams(window.location.search);
+        this.id = urlParams.get('id') || '';
         this.brs = decodeURIComponent(urlParams.get('brs') || '');
         this.functional = decodeURIComponent(urlParams.get('functional') || '');
         this.code = decodeURIComponent(urlParams.get('code') || '');
-        if (urlParams.toString()) {
-          window.history.replaceState({}, document.title, window.location.pathname);
-        }
+        this.error = decodeURIComponent(urlParams.get('error') || '');
+        if (urlParams.toString()) window.history.replaceState({}, document.title, window.location.pathname);
+        this.loading = false;
       },
       methods: {
         submit() {
-          const scriptUrl = 'https://script.google.com/macros/s/AKfycbymCIhnLVXMDGY4W11-0MIejUv4RPuMs0xhpETZmcwVrLLFMZxyiJ-fFz_ioCETD95p2Q/exec'; // Replace with deployed URL
-          const redirectUrl = `${scriptUrl}?input=${encodeURIComponent(this.input)}`;
-          window.location.href = redirectUrl;
+          this.loading = true;
+          const scriptUrl = 'https://script.google.com/a/macros/decoyenterprises.com/s/AKfycbykTBohEfEnLdNvUOrCffvnYhNZ8Qlh_EigbKjKW_jDQ6ndzTgVo2B4r2TaRUf2ALtL/exec';
+          console.log('Redirecting to:', `${scriptUrl}?input=${encodeURIComponent(this.input)}`);
+          window.location.href = `${scriptUrl}?input=${encodeURIComponent(this.input)}`;
+        },
+        fetchFull(type) {
+          this.loading = true;
+          const scriptUrl = 'https://script.google.com/a/macros/decoyenterprises.com/s/AKfycbykTBohEfEnLdNvUOrCffvnYhNZ8Qlh_EigbKjKW_jDQ6ndzTgVo2B4r2TaRUf2ALtL/exec';
+          console.log('Redirecting to:', `${scriptUrl}?id=${this.id}`);
+          window.location.href = `${scriptUrl}?id=${this.id}`;
         }
       }
     });
